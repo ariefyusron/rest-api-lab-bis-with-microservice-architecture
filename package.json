@@ -1,0 +1,21 @@
+{
+  "name": "lab-bis-microservice",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "cd auth && node index",
+    "install": "cd auth && npm install",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ariefyusron/rest-api-lab-bis-with-microservice-architecture.git"
+  },
+  "author": "Arief Yusron",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ariefyusron/rest-api-lab-bis-with-microservice-architecture/issues"
+  },
+  "homepage": "https://github.com/ariefyusron/rest-api-lab-bis-with-microservice-architecture#readme"
+}
