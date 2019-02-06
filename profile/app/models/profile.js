@@ -1,18 +1,26 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-const authSchema = new Schema({
-  nim: {
+const profileSchema = new Schema({
+  auth_id: {
     type: String,
-    minlength: 12,
-    maxlength: 12,
     unique: true,
     required: true
   },
-  password: {
+  name: {
     type: String,
-    minlength: 8,
-    required: true
+  },
+  fakultas: {
+    type: String,
+  },
+  prodi: {
+    type: String,
+  },
+  tahunAngkatan: {
+    type: String,
+  },
+  img_url: {
+    type: String,
   },
   created_at: {
     type: Date,
@@ -24,6 +32,6 @@ const authSchema = new Schema({
   }
 })
 
-const Auth = mongoose.model('Auth',authSchema)
+const Profile = mongoose.model('Profile',profileSchema)
 
-module.exports = Auth
+module.exports = Profile

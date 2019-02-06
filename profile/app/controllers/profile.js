@@ -1,41 +1,63 @@
-const authModel = require('../models/profile')
+const profileModel = require('../models/profile')
 
-const register = async (req,res) => {
+const store = async (req,res) => {
   try{
-    const newUser = await authModel.create(req.body)
-    res.json(newUser)
+    const storeNewUserProfile = await profileModel.create({
+      auth_id: req.userData._id
+    })
+    res.json(storeNewUserProfile)
   } catch{
     res.status(400).json({
-      message: 'NIM already exists'
+      message: 'User already exists profile'
     })
   }
 }
 
-const login = async (req,res) => {
-  const userByNim = await authModel.findOne({
-    nim: req.body.nim
-  })
-  if(userByNim){
-    const compare = req.bcrypt.compareSync(req.body.password,userByNim.password)
-    if(compare){
-      const token = req.jwt.sign({userByNim},req.secret_key)
-      res.json({
-        userData: userByNim,
-        token: token
-      })
-    } else{
-      res.status(400).json({
-        message: 'Password invalid'
-      })
+const show = async (req,res) => {
+  try{
+    let showProfile = await profileModel.findOne({
+      auth_id: req.userData._id
+    })
+    showProfile = {
+      nim: req.userData.nim,
+      name: showProfile.name || null,
+      fakultas: showProfile.fakultas || null,
+      prodi: showProfile.prodi || null,
+      tahunAngkatan: showProfile.tahunAngkatan || null,
+      img_url: showProfile.img_url || null
     }
-  } else{
+    res.json(showProfile)
+  } catch{
     res.status(400).json({
-      message: 'NIM invalid'
+      message: 'Error please try again'
+    })
+  }
+}
+
+const update = async (req,res) => {
+  try{
+    await profileModel.findOneAndUpdate({auth_id: req.userData._id}, {$set:req.body})
+    let showUpdateProfil = await profileModel.findOne({
+      auth_id: req.userData._id
+    })
+    showUpdateProfil = {
+      nim: req.userData.nim,
+      name: showUpdateProfil.name || null,
+      fakultas: showUpdateProfil.fakultas || null,
+      prodi: showUpdateProfil.prodi || null,
+      tahunAngkatan: showUpdateProfil.tahunAngkatan || null,
+      img_url: showUpdateProfil.img_url || null
+    }
+    res.json(showUpdateProfil)
+  } catch{
+    res.status(400).json({
+      message: 'Error please try again'
     })
   }
 }
 
 module.exports = {
-  register,
-  login
+  store,
+  show,
+  update
 }
