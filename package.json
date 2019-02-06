@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "cd auth && nodemon index",
-    "install": "cd auth && npm install",
+    "auth" : "cd auth && nodemon index",
+    "profile": "cd profile && nodemon index",
+    "install": "cd auth && npm install && cd .. && cd profile && npm install",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
