@@ -1,5 +1,6 @@
 {
   "env": {
-    "JWT_SECRET": "ariefyusron"
+    "JWT_SECRET": "ariefyusron",
+    "URL_PROFILE": "http://localhost:5000/profile"
   }
 }
