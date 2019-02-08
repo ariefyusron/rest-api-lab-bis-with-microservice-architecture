@@ -13,7 +13,7 @@ const port = 6000
 const route = require('./app/routes')
 
 //connect to mongoDb with mongoose
-mongoose.connect('mongodb://lab_bis_service_auth:ariefyusron98@ds125125.mlab.com:25125/lab_bis_auths')
+mongoose.connect('mongodb://lab_bis_service_class:ariefyusron98@ds127545.mlab.com:27545/lab_bis_class')
 mongoose.Promise = global.Promise
 
 app.use((req,res,next) => {

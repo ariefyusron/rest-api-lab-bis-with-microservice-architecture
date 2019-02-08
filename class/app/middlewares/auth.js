@@ -9,6 +9,20 @@ const checkAuth = (req,res,next) => {
   }
 }
 
+const validasiStoreClass = (req,res,next) => {
+  req.check('name', 'Name is required').not().isEmpty()
+  req.check('classId', 'Class Id is required').not().isEmpty()
+  const error = req.validationErrors()
+  if(error){
+    res.status(400).json({
+      message: error[0].msg
+    })
+  } else{
+    next()
+  }
+}
+
 module.exports = {
-  checkAuth
+  checkAuth,
+  validasiStoreClass
 }
