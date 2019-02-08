@@ -1,7 +1,10 @@
 const classModel = require('../models/class')
 
 const index = async (req,res) => {
-
+  const getClass = await classModel.find({
+    'members.auth_id': req.userData._id
+  }, ['name','classIdForJoin','members'])
+  res.json(getClass)
 }
 
 const store = async (req,res) => {
