@@ -6,7 +6,8 @@
   "scripts": {
     "auth" : "cd auth && nodemon index",
     "profile": "cd profile && nodemon index",
-    "install": "cd auth && npm install && cd .. && cd profile && npm install",
+    "class": "cd class && nodemon index",
+    "install": "cd auth && npm install && cd .. && cd profile && npm install && cd .. && cd class && npm install",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
