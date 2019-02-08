@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-const authSchema = new Schema({
+const classSchema = new Schema({
   nim: {
     type: String,
     minlength: 12,
@@ -24,6 +24,6 @@ const authSchema = new Schema({
   }
 })
 
-const Auth = mongoose.model('Auth',authSchema)
+const Class = mongoose.model('Class',classSchema)
 
-module.exports = Auth
+module.exports = Class

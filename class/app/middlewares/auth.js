@@ -1,16 +1,14 @@
-const register = (req,res,next) => {
-  req.check('nim', 'NIM length 12').isLength({min:12, max:12})
-  const error = req.validationErrors()
-  if(error){
-    res.status(400).json({
-      message: error[0].msg
-    })
-  } else{
-    req.body.password = req.bcrypt.hashSync(req.body.nim, req.saltRounds)
+const checkAuth = (req,res,next) => {
+  try{
+    const token = req.headers.authorization.split(' ')[1]
+    const decoded = req.jwt.verify(token,req.secret_key)
+    req.userData = decoded.userByNim
     next()
+  } catch(error){
+    res.status(400).json({message: 'Auth failed'})
   }
 }
 
 module.exports = {
-  register
+  checkAuth
 }

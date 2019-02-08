@@ -1,4 +1,4 @@
-const authModel = require('../models/auth')
+const authModel = require('../models/class')
 
 const register = async (req,res) => {
   try{
