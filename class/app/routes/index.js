@@ -6,5 +6,6 @@ const middleware = require('../middlewares/auth')
 
 router.get('/class', middleware.checkAuth, controller.index)
 router.post('/class', [middleware.checkAuth, middleware.validasiStoreClass], controller.store)
+router.post('/class/join/:idClassForJoin', middleware.checkAuth, controller.join)
 
 module.exports = router

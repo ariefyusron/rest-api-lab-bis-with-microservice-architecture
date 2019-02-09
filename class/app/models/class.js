@@ -35,7 +35,7 @@ const classSchema = new Schema({
     unique: true,
     required: true
   },
-  members: members,
+  members: [members],
   isDelete: {
     type: Boolean,
     default: 0

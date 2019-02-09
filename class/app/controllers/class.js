@@ -1,10 +1,34 @@
 const classModel = require('../models/class')
 
 const index = async (req,res) => {
-  const getClass = await classModel.find({
-    'members.auth_id': req.userData._id
-  }, ['name','classIdForJoin','members'])
+  const getClass = await classModel.aggregate([
+    {$match: {'members.auth_id': req.userData._id}}
+  ])
   res.json(getClass)
+}
+
+const join = (req,res) => {
+  classModel.findOne({
+    classIdForJoin: req.params.idClassForJoin
+  },(err, result) => {
+    if(!result){
+      res.status(400).json({
+        message: 'Class not found'
+      })
+    } else{
+      for(i in result.members){
+        if(req.userData._id == result.members[i].auth_id){
+          res.status(400).json({
+            message: 'You have joined'
+          })
+          return false
+        }
+      }
+      result.members.push({auth_id: req.userData._id,status: 'Student'})
+      result.save()
+      res.json(result)
+    }
+  })
 }
 
 const store = async (req,res) => {
@@ -27,5 +51,6 @@ const store = async (req,res) => {
 
 module.exports = {
   index,
+  join,
   store
 }
