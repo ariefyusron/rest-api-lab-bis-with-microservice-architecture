@@ -2,8 +2,23 @@ const classModel = require('../models/class')
 
 const index = async (req,res) => {
   const getClass = await classModel.aggregate([
-    {$match: {'members.auth_id': req.userData._id}}
+    {$match: {'members.auth_id': req.userData._id}},
+    {$unwind: '$members'},
+    {$group: {
+      _id: '$_id',
+      classIdForJoin: {'$first':'$classIdForJoin'},
+      name: {'$first':'$name'},
+      totalMembers: {$sum: 1}
+    }},
+    {$sort: {_id: -1}}
   ])
+  for(i in getClass) {
+    if(getClass[i].totalMembers === 1){
+      getClass[i].totalMembers = `${getClass[i].totalMembers} member`
+    } else{
+      getClass[i].totalMembers = `${getClass[i].totalMembers} members`
+    }
+  }
   res.json(getClass)
 }
 
