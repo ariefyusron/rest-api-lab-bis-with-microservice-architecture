@@ -1,9 +1,15 @@
 const classModel = require('../models/class')
 
 const index = async (req,res) => {
-  const getClass = await classModel.aggregate([
-    {$match: {'members.auth_id': req.userData._id}},
+  const getClassToResults = await classModel.aggregate([
+    {$match: {members: {
+      $elemMatch: {
+        auth_id: req.userData._id,
+        isLeave: false
+      }
+    }}},
     {$unwind: '$members'},
+    {$match: {'members.isLeave': false}},
     {$group: {
       _id: '$_id',
       classIdForJoin: {'$first':'$classIdForJoin'},
@@ -12,14 +18,14 @@ const index = async (req,res) => {
     }},
     {$sort: {_id: -1}}
   ])
-  for(i in getClass) {
-    if(getClass[i].totalMembers === 1){
-      getClass[i].totalMembers = `${getClass[i].totalMembers} member`
+  for(i in getClassToResults) {
+    if(getClassToResults[i].totalMembers <= 1){
+      getClassToResults[i].totalMembers = `${getClassToResults[i].totalMembers} member`
     } else{
-      getClass[i].totalMembers = `${getClass[i].totalMembers} members`
+      getClassToResults[i].totalMembers = `${getClassToResults[i].totalMembers} members`
     }
   }
-  res.json(getClass)
+  res.json(getClassToResults)
 }
 
 const join = (req,res) => {
@@ -32,7 +38,7 @@ const join = (req,res) => {
       })
     } else{
       for(i in result.members){
-        if(req.userData._id == result.members[i].auth_id){
+        if(req.userData._id == result.members[i].auth_id && result.members[i].isLeave == false){
           res.status(400).json({
             message: 'You have joined'
           })
@@ -42,6 +48,31 @@ const join = (req,res) => {
       result.members.push({auth_id: req.userData._id,status: 'Student'})
       result.save()
       res.json(result)
+    }
+  })
+}
+
+const leave = (req,res) => {
+  classModel.findOne({
+    classIdForJoin: req.params.idClassForJoin,
+    'members.auth_id': req.userData._id
+  },(err, result) => {
+    if(!result){
+      res.status(400).json({
+        message: 'Class not found'
+      })
+    } else{
+      for(i in result.members){
+        if(req.userData._id == result.members[i].auth_id && result.members[i].isLeave == false){
+          result.members[i].isLeave = true
+          result.save()
+          res.json(result)
+          return false
+        }
+      }
+      res.status(400).json({
+        message: 'Class not found'
+      })
     }
   })
 }
@@ -67,5 +98,6 @@ const store = async (req,res) => {
 module.exports = {
   index,
   join,
+  leave,
   store
 }
